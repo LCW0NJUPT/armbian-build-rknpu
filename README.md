@@ -1,3 +1,14 @@
+
+```shell
+apt-get -y install git  
+git clone --depth=1 --branch=main https://github.com/LCW0NJUPT/armbian-build-rknpu
+cd armbian-build-rknpu  
+./compile.sh KERNEL_GIT=shallow # If giving problems, you could try with sudo, but not recommended  
+```
+
+
+
+
 <p align="center">
   <a href="#build-framework">
   <img src=".github/armbian-logo.png" alt="Armbian logo" width="144">
