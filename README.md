@@ -1,13 +1,80 @@
 
 ```shell
-apt-get -y install git  
+apt-get -y install git
+sudo apt install build-essential texinfo gcc  
 git clone --depth=1 --branch=main https://github.com/LCW0NJUPT/armbian-build-rknpu
 cd armbian-build-rknpu  
 ./compile.sh KERNEL_GIT=shallow # If giving problems, you could try with sudo, but not recommended  
 ```
+如果您在中国，请全程挂代理。检测和设置代理如下： 
+```shell
+env |grep -i proxy  
+unset http_proxy  
+unset https_proxy  
+export http_proxy="您的代理IP:端口"  
+export https_proxy="您的代理IP:端口"
+```
+检测和设置ssh代理如下：  
+```shell
+git config --list --show-origin  
+git config --global http.proxy http://您的代理IP:端口  
+git config --global https.proxy https://您的代理IP:端口
+```
+或者  
+```shell
+git config --global http.proxy 您的代理IP:端口    
+git config --global http.sslverify false
+```  
+取消代理    
+```shell
+git config --global --unset http.proxy    
+git config --global --unset http.sslverify
+```  
 
 
+接下来可以参考这篇材料 https://github.com/Pelochus/armbian-build-rknpu-updates  
+• Change kernel config? No (unless you are sure what you're doing)  
+更改内核配置？否（除非您确定自己在做什么）  
+• Board: Select your board I use Orange Pi 5. Other supported are OPi 5 Plus, Rock Pi 5...  
+板子：选择你的板子 I use Orange Pi 5。其他支持的有 OPi 5 Plus、Rock Pi 5…  
+我选Rock5B  
+• Kernel: Select vendor  
+内核：选择供应商  
+• Release: Jammy, since its closer to Ubuntu, hence easier to use. You can choose Bookworm if you prefer Debian  
+发布：Jammy，因为它更接近 Ubuntu，因此更易于使用。如果您更喜欢 Debian，可以选择 Bookworm  
+我选了Nobel  
+• Desktop: Choose based on personal preference, use CLI if low on RAM  
+桌面：根据个人喜好选择，如果 RAM 不足，请使用 CLI  
+很显然，为了桌面硬件加速，肯定选Desktop+gnome  
+• Minimal/Standard: Standard unless you really prefer installing your packages by yourself, but not worth the effort usually  
+Minimal/Standard：除非您真的喜欢自己安装软件包，否则 Standard （标准），但通常不值得付出努力  
+我选了需要的几个  
 
+接下来是漫长的等待时间，国内的网络非常影响开发效率  
+
+
+• 到了内核设置后，先各种选择，最后在出现packages的时候ctrl+c出去，手动换个源  
+```shell
+• find ./ -name sources.list  
+• find ./ -name armbian.list
+```
+![image](https://github.com/user-attachments/assets/b87f7d8c-0e9a-451e-818e-e06f72942abd)
+
+
+需要重复编译的完整指令如下
+desktop版本：
+```shell
+./compile.sh build BOARD=rock-5b BRANCH=vendor BUILD_DESKTOP=yes BUILD_MINIMAL=no DESKTOP_APPGROUPS_SELECTED='browsers desktop_tools editors internet multimedia programming remote_desktop' DESKTOP_ENVIRONMENT=gnome DESKTOP_ENVIRONMENT_CONFIG_NAME=config_base KERNEL_CONFIGURE=yes KERNEL_GIT=shallow RELEASE=noble
+```
+server版本：
+```shell
+./compile.sh build BOARD=rock-5b BRANCH=vendor BUILD_DESKTOP=no BUILD_MINIMAL=no KERNEL_CONFIGURE=yes KERNEL_GIT=shallow RELEASE=noble
+```
+
+• Then, if everything goes alright, output image will be in output/images. Flash it to your SD card and you are done!  
+然后，如果一切正常，输出图像将位于 output/images 中。将其刷入您的 SD 卡，您就完成了！  
+If not, check Armbian documentation or README below  
+如果没有，请查看下面的 Armbian 文档或 README 文件  
 
 <p align="center">
   <a href="#build-framework">
